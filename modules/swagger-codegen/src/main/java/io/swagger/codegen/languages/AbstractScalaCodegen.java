@@ -111,6 +111,48 @@ public abstract class AbstractScalaCodegen extends DefaultCodegen {
         return toModelName(type);
     }
 
+    private boolean startsWithTwoUppercaseLetters(String name) {
+        boolean startsWithTwoUppercaseLetters = false;
+        if(name.length() > 1) {
+            startsWithTwoUppercaseLetters = name.substring(0, 2).equals(name.substring(0, 2).toUpperCase());
+        }
+        return startsWithTwoUppercaseLetters;
+    }
+
+    @Override
+    public String toVarName(String name) {
+        // sanitize name
+        name = sanitizeName(name); // FIXME: a parameter should not be assigned. Also declare the methods parameters as 'final'.
+
+        if (name.toLowerCase().matches("^_*class$")) {
+            return "propertyClass";
+        }
+
+        if("_".equals(name)) {
+            name = "_u";
+        }
+
+        // if it's all uppper case, do nothing
+        if (name.matches("^[A-Z_]*$")) {
+            return name;
+        }
+
+        if(startsWithTwoUppercaseLetters(name)){
+            name = name.substring(0, 2).toLowerCase() + name.substring(2);
+        }
+
+        // camelize (lower first character) the variable name
+        // pet_id => petId
+        name = camelize(name, true);
+
+        // for reserved word or word starting with number, append _
+        if (isReservedWord(name) || name.matches("^\\d.*")) {
+            name = escapeReservedWord(name);
+        }
+
+        return name;
+    }
+
     @Override
     public String toInstantiationType(Property p) {
         if (p instanceof MapProperty) {

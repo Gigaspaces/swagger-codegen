@@ -24,6 +24,7 @@ public class ScalatraServerCodegen extends AbstractScalaCodegen implements Codeg
         outputFolder = "generated-code/scalatra";
         modelTemplateFiles.put("model.mustache", ".scala");
         apiTemplateFiles.put("api.mustache", ".scala");
+        apiTemplateFiles.put("apiSupport.mustache", "Support.scala");
         embeddedTemplateDir = templateDir = "scalatra";
         apiPackage = "com.wordnik.client.api";
         modelPackage = "com.wordnik.client.model";
@@ -77,6 +78,7 @@ public class ScalatraServerCodegen extends AbstractScalaCodegen implements Codeg
         additionalProperties.put(CodegenConstants.ARTIFACT_ID, artifactId);
         additionalProperties.put(CodegenConstants.ARTIFACT_VERSION, artifactVersion);
 
+        supportingFiles.add(new SupportingFile("pom.mustache", "", "pom.xml"));
         supportingFiles.add(new SupportingFile("README.mustache", "", "README.md"));
         supportingFiles.add(new SupportingFile("build.sbt", "", "build.sbt"));
         supportingFiles.add(new SupportingFile("web.xml", "/src/main/webapp/WEB-INF", "web.xml"));
