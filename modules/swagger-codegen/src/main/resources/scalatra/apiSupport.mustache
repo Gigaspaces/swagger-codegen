@@ -38,10 +38,16 @@ response.headers += ("Access-Control-Allow-Origin" -> "*")
         parameters({{#allParams}}{{>queryParam}}{{>pathParam}}{{>bodyParam}}{{>formParam}}{{>headerParam}}{{#hasMore}}, {{/hasMore}}{{/allParams}})
         )
 
-        def {{nickname}}
+        def {{nickname}}({{#allParams}}{{paramName}}:{{>paramType}}{{#hasMore}}, {{/hasMore}}{{/allParams}}):Unit
 
         {{httpMethod}}("{{{vendorExtensions.x-scalatra-path}}}",operation({{nickname}}Operation)) {
-           {{nickname}}
+
+        {{#allParams}}{{#isFile}}
+            val {{paramName}} = fileParams("{{paramName}}"){{/isFile}}{{^isFile}}{{#isPathParam}}
+            val {{paramName}} = params.getOrElse("{{paramName}}", halt(400)){{/isPathParam}}
+        {{>queryParamOperation}}{{>headerParamOperation}}{{>formParamMustache}}{{>bodyParamOperation}}{{/isFile}}
+        {{/allParams}}
+           {{nickname}}({{#allParams}}{{paramName}}{{#hasMore}}, {{/hasMore}}{{/allParams}})
         }
 
     {{/operation}}

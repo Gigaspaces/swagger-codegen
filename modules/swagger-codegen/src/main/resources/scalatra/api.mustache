@@ -32,15 +32,7 @@ class {{classname}} (override implicit val swagger: Swagger) extends {{classname
 {{#operations}}
 {{#operation}}
     {{newline}}
-  def {{nickname}} = {
-  {{#allParams}}
-      {{#isFile}}val {{paramName}} = fileParams("{{paramName}}"){{/isFile}}
-      {{^isFile}}{{#isPathParam}}
-          val {{paramName}} = params.getOrElse("{{paramName}}", halt(400)){{/isPathParam}}
-      {{>queryParamOperation}}{{>headerParamOperation}}{{>formParamMustache}}{{>bodyParamOperation}}
-      {{/isFile}}
-      println("{{paramName}}: " + {{paramName}})
-  {{/allParams}}
+  def {{nickname}}({{#allParams}}{{paramName}}:{{>paramType}}{{#hasMore}}, {{/hasMore}}{{/allParams}}):Unit = {
   }
 {{/operation}}
 {{/operations}}
