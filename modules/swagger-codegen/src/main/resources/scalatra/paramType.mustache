@@ -1,1 +1,1 @@
-{{#isFile}}org.scalatra.servlet.FileItem{{/isFile}}{{^isFile}}Option[{{dataType}}]{{/isFile}}
+{{#isFile}}org.scalatra.servlet.FileItem{{/isFile}}{{^isFile}}{{#isBodyParam}}{{dataType}}{{/isBodyParam}}{{^isBodyParam}}Option[{{dataType}}]{{/isBodyParam}}{{/isFile}}

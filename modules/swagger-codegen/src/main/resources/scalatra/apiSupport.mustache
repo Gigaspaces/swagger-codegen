@@ -44,7 +44,7 @@ response.headers += ("Access-Control-Allow-Origin" -> "*")
 
         {{#allParams}}{{#isFile}}
             val {{paramName}} = fileParams("{{paramName}}"){{/isFile}}{{^isFile}}{{#isPathParam}}
-            val {{paramName}} = params.getOrElse("{{paramName}}", halt(400)){{/isPathParam}}
+            val {{paramName}} = params.getAs[{{dataType}}]("{{paramName}}"){{/isPathParam}}
         {{>queryParamOperation}}{{>headerParamOperation}}{{>formParamMustache}}{{>bodyParamOperation}}{{/isFile}}
         {{/allParams}}
            {{nickname}}({{#allParams}}{{paramName}}{{#hasMore}}, {{/hasMore}}{{/allParams}})
