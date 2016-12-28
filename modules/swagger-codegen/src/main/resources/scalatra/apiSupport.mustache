@@ -17,39 +17,37 @@ import org.scalatra.servlet.{FileUploadSupport, MultipartConfig, SizeConstraintE
 import scala.collection.JavaConverters._
 
 abstract class {{classname}}Support (implicit val swagger: Swagger) extends ScalatraServlet
-with FileUploadSupport
-with JacksonJsonSupport
-with SwaggerSupport {
+    with FileUploadSupport
+    with JacksonJsonSupport
+    with SwaggerSupport {
 protected implicit val jsonFormats: Formats = DefaultFormats
 
 protected val applicationDescription: String = "{{classname}}"
 override protected val applicationName: Option[String] = Some("{{basePathWithoutHost}}/{{baseName}}")
 
-before() {
-contentType = formats("json")
-response.headers += ("Access-Control-Allow-Origin" -> "*")
-}
+    before() {
+        contentType = formats("json")
+        response.headers += ("Access-Control-Allow-Origin" -> "*")
+    }
 {{#operations}}
-    {{#operation}}
-        {{newline}}
-
-        val {{nickname}}Operation = (apiOperation[{{#returnType}}{{{returnType}}}{{/returnType}}{{^returnType}}Unit{{/returnType}}]("{{nickname}}")
+{{#operation}}
+{{newline}}
+    val {{nickname}}Operation = (apiOperation[{{#returnType}}{{{returnType}}}{{/returnType}}{{^returnType}}Unit{{/returnType}}]("{{nickname}}")
         summary "{{{summary}}}"
         parameters({{#allParams}}{{>queryParam}}{{>pathParam}}{{>bodyParam}}{{>formParam}}{{>headerParam}}{{#hasMore}}, {{/hasMore}}{{/allParams}})
-        )
+    )
 
-        def {{nickname}}({{#allParams}}{{paramName}}:{{>paramType}}{{#hasMore}}, {{/hasMore}}{{/allParams}}):Unit
+    def {{nickname}}({{#allParams}}{{paramName}}:{{>paramType}}{{#hasMore}}, {{/hasMore}}{{/allParams}}):Unit
 
-        {{httpMethod}}("{{{vendorExtensions.x-scalatra-path}}}",operation({{nickname}}Operation)) {
+    {{httpMethod}}("{{{vendorExtensions.x-scalatra-path}}}",operation({{nickname}}Operation)) {
+    {{#allParams}}{{#isFile}}
+    val {{paramName}} = fileParams("{{paramName}}"){{/isFile}}{{^isFile}}{{#isPathParam}}
+    val {{paramName}} = params.getAs[{{dataType}}]("{{paramName}}"){{/isPathParam}}
+    {{>queryParamOperation}}{{>headerParamOperation}}{{>formParamMustache}}{{>bodyParamOperation}}{{/isFile}}
+    {{/allParams}}
+    {{nickname}}({{#allParams}}{{paramName}}{{#hasMore}}, {{/hasMore}}{{/allParams}})
+    }
 
-        {{#allParams}}{{#isFile}}
-            val {{paramName}} = fileParams("{{paramName}}"){{/isFile}}{{^isFile}}{{#isPathParam}}
-            val {{paramName}} = params.getAs[{{dataType}}]("{{paramName}}"){{/isPathParam}}
-        {{>queryParamOperation}}{{>headerParamOperation}}{{>formParamMustache}}{{>bodyParamOperation}}{{/isFile}}
-        {{/allParams}}
-           {{nickname}}({{#allParams}}{{paramName}}{{#hasMore}}, {{/hasMore}}{{/allParams}})
-        }
-
-    {{/operation}}
+{{/operation}}
 {{/operations}}
 }

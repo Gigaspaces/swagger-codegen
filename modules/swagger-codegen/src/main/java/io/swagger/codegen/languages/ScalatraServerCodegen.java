@@ -1,17 +1,13 @@
 package io.swagger.codegen.languages;
 
-import io.swagger.codegen.CliOption;
 import io.swagger.codegen.CodegenConfig;
 import io.swagger.codegen.CodegenConstants;
 import io.swagger.codegen.CodegenOperation;
 import io.swagger.codegen.CodegenType;
 import io.swagger.codegen.SupportingFile;
+import io.swagger.models.Operation;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class ScalatraServerCodegen extends AbstractScalaCodegen implements CodegenConfig {
 
@@ -137,6 +133,9 @@ public class ScalatraServerCodegen extends AbstractScalaCodegen implements Codeg
             int pathParamIndex = 0;
 
             for (int i = 0; i < items.length; ++i) {
+                if(items[i].equals(op.baseName)){
+                    continue;
+                }
                 if (items[i].matches("^\\{(.*)\\}$")) { // wrap in {}
                     scalaPath = scalaPath + ":" + items[i].replace("{", "").replace("}", "");
                     pathParamIndex++;
@@ -153,6 +152,31 @@ public class ScalatraServerCodegen extends AbstractScalaCodegen implements Codeg
         }
 
         return objs;
+    }
+
+    @Override
+    public void addOperationToGroup(String tag, String resourcePath, Operation operation, CodegenOperation co, Map<String, List<CodegenOperation>> operations) {
+        String basePath = resourcePath;
+        if (basePath.startsWith("/")) {
+            basePath = basePath.substring(1);
+        }
+        int pos = basePath.indexOf("/");
+        if (pos > 0) {
+            basePath = basePath.substring(0, pos);
+        }
+
+        if (basePath.equals("")) {
+            basePath = "default";
+        } else {
+            co.subresourceOperation = !co.path.isEmpty();
+        }
+        List<CodegenOperation> opList = operations.get(basePath);
+        if (opList == null) {
+            opList = new ArrayList<CodegenOperation>();
+            operations.put(basePath, opList);
+        }
+        opList.add(co);
+        co.baseName = basePath;
     }
 
 
