@@ -87,6 +87,7 @@ public class ScalatraServerCodegen extends AbstractScalaCodegen implements Codeg
         supportingFiles.add(new SupportingFile("project/build.properties", "project", "build.properties"));
         supportingFiles.add(new SupportingFile("project/plugins.sbt", "project", "plugins.sbt"));
         supportingFiles.add(new SupportingFile("sbt", "", "sbt"));
+        supportingFiles.add(new SupportingFile("swagger-codegen-ignore", "", ".swagger-codegen-ignore"));
 
         instantiationTypes.put("array", "ArrayList");
         instantiationTypes.put("map", "HashMap");
