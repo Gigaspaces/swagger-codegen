@@ -36,7 +36,6 @@ libraryDependencies ++= Seq(
   "net.databinder.dispatch" %% "dispatch-core"                  % "0.11.2",
   //"net.databinder.dispatch" %% "json4s-jackson"                 % "0.11.2",
   "net.databinder.dispatch" %% "dispatch-json4s-jackson"        % "0.11.2",
-  "com.typesafe.akka"       %% "akka-actor"                     % "2.3.6",
   "org.eclipse.jetty"        % "jetty-server"                   % "9.2.3.v20140905" % "container;compile;test",
   "org.eclipse.jetty"        % "jetty-webapp"                   % "9.2.3.v20140905" % "container;compile;test",
   "org.eclipse.jetty.orbit"  % "javax.servlet"                  % "3.0.0.v201112011016" % "container;compile;provided;test" artifacts (Artifact("javax.servlet", "jar", "jar"))

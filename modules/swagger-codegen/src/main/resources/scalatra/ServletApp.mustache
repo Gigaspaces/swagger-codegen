@@ -2,14 +2,12 @@
 
 package io.swagger.app
 
-import _root_.akka.actor.ActorSystem
-
 import org.scalatra.swagger.{ ApiInfo, SwaggerWithAuth, Swagger }
 import org.scalatra.swagger.{JacksonSwaggerBase, Swagger}
 import org.scalatra.ScalatraServlet
 import org.json4s.{DefaultFormats, Formats}
 
-class ResourcesApp(implicit protected val system: ActorSystem, val swagger: SwaggerApp)
+class ResourcesApp(implicit val swagger: SwaggerApp)
   extends ScalatraServlet with JacksonSwaggerBase {
   before() {
     response.headers += ("Access-Control-Allow-Origin" -> "*")
