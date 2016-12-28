@@ -24,6 +24,7 @@ public class ScalatraServerCodegen extends AbstractScalaCodegen implements Codeg
         outputFolder = "generated-code/scalatra";
         modelTemplateFiles.put("model.mustache", ".scala");
         apiTemplateFiles.put("api.mustache", ".scala");
+        apiTemplateFiles.put("apiSupport.mustache", "Support.scala");
         embeddedTemplateDir = templateDir = "scalatra";
         apiPackage = "com.wordnik.client.api";
         modelPackage = "com.wordnik.client.model";
