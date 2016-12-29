@@ -26,6 +26,7 @@ public abstract class AbstractScalaCodegen extends DefaultCodegen {
     protected String modelPropertyNaming = "camelCase";
     protected String invokerPackage = "io.swagger.client";
     protected String sourceFolder = "src/main/scala";
+    protected String resourcesFolder = "src/main/resources";
 
     public AbstractScalaCodegen() {
         super();

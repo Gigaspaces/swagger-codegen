@@ -7,16 +7,16 @@ import org.scalatra.servlet.ScalatraListener
 object JettyMain {
 
   object conf {
-    val port = sys.env.get("PORT") map (_.toInt) getOrElse (8080)
-    val stopTimeout = sys.env.get("STOP_TIMEOUT") map (_.toInt) getOrElse (5000)
-    val connectorIdleTimeout = sys.env.get("CONNECTOR_IDLE_TIMEOUT") map (_.toInt) getOrElse (90000)
-    val webapp = sys.env.get("PUBLIC") getOrElse "webapp"
-    val contextPath = sys.env.get("CONTEXT_PATH") getOrElse "/"
+    val port: Int = sys.env.get("PORT") map (_.toInt) getOrElse 8080
+    val stopTimeout: Int = sys.env.get("STOP_TIMEOUT") map (_.toInt) getOrElse 5000
+    val connectorIdleTimeout: Int = sys.env.get("CONNECTOR_IDLE_TIMEOUT") map (_.toInt) getOrElse 90000
+    val webapp: String = sys.env.getOrElse("PUBLIC", "webapp")
+    val contextPath: String = sys.env.getOrElse("CONTEXT_PATH", "/")
   }
 
-  def main(args: Array[String]) = {
+  def main(args: Array[String]): Unit = {
     val server: Server = new Server
-    println("starting jetty")
+    println("starting jetty on port " + conf.port)
 
     server setStopTimeout conf.stopTimeout
     //server setDumpAfterStart true

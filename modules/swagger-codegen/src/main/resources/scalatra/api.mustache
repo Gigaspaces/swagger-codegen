@@ -8,7 +8,6 @@ package {{package}}
 import java.io.File
 
 import org.scalatra.{ TypedParamSupport, ScalatraServlet }
-import org.scalatra.swagger._
 import org.json4s._
 import org.json4s.JsonDSL._
 import org.scalatra.json.{ JValueResult, JacksonJsonSupport }
@@ -16,10 +15,9 @@ import org.scalatra.servlet.{FileUploadSupport, MultipartConfig, SizeConstraintE
 
 import scala.collection.JavaConverters._
 
-class {{classname}} (override implicit val swagger: Swagger) extends {{classname}}Support
+class {{classname}} extends {{classname}}Support
     with FileUploadSupport
-    with JacksonJsonSupport
-    with SwaggerSupport {
+    with JacksonJsonSupport {
     override protected implicit val jsonFormats: Formats = DefaultFormats
 
   override protected val applicationDescription: String = "{{classname}}"

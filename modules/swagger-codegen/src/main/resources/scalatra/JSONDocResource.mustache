@@ -1,0 +1,20 @@
+{{>licenseInfo}}
+
+
+import org.json4s.{DefaultFormats, Formats}
+import org.scalatra.ScalatraServlet
+import org.scalatra.json.JacksonJsonSupport
+
+class JSONDocResource extends ScalatraServlet
+with JacksonJsonSupport {
+    override protected implicit val jsonFormats: Formats = DefaultFormats
+
+    before() {
+        contentType = formats("json")
+        response.headers += ("Access-Control-Allow-Origin" -> "*")
+    }
+
+    get("/") {
+    getClass.getResourceAsStream("/swagger.json")
+    }
+}

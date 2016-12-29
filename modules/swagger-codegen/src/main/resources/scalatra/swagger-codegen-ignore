@@ -24,3 +24,5 @@
 
 **/api/*Api.scala
 .swagger-codegen-ignore
+pom.xml
+**/log4j.properties

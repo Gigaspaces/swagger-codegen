@@ -1,12 +1,22 @@
 package io.swagger.codegen.languages;
 
+import org.apache.commons.io.FileUtils;
+
 import io.swagger.codegen.CodegenConfig;
 import io.swagger.codegen.CodegenConstants;
 import io.swagger.codegen.CodegenOperation;
 import io.swagger.codegen.CodegenType;
 import io.swagger.codegen.SupportingFile;
+import io.swagger.models.Swagger;
+import io.swagger.util.Json;
 import io.swagger.models.Operation;
 
+import java.io.File;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
 import java.util.*;
 
 public class ScalatraServerCodegen extends AbstractScalaCodegen implements CodegenConfig {
@@ -80,7 +90,8 @@ public class ScalatraServerCodegen extends AbstractScalaCodegen implements Codeg
         supportingFiles.add(new SupportingFile("web.xml", "/src/main/webapp/WEB-INF", "web.xml"));
         supportingFiles.add(new SupportingFile("JettyMain.mustache", sourceFolder, "JettyMain.scala"));
         supportingFiles.add(new SupportingFile("Bootstrap.mustache", sourceFolder, "ScalatraBootstrap.scala"));
-        supportingFiles.add(new SupportingFile("ServletApp.mustache", sourceFolder, "ServletApp.scala"));
+        supportingFiles.add(new SupportingFile("JSONDocResource.mustache", sourceFolder, "JSONDocResource.scala"));
+        supportingFiles.add(new SupportingFile("log4j.properties", resourcesFolder, "log4j.properties"));
         supportingFiles.add(new SupportingFile("project/build.properties", "project", "build.properties"));
         supportingFiles.add(new SupportingFile("project/plugins.sbt", "project", "plugins.sbt"));
         supportingFiles.add(new SupportingFile("sbt", "", "sbt"));
@@ -118,6 +129,19 @@ public class ScalatraServerCodegen extends AbstractScalaCodegen implements Codeg
     @Override
     public String getHelp() {
         return "Generates a Scala server application with Scalatra.";
+    }
+
+    @Override
+    public void processSwagger(Swagger swagger) {
+        super.processSwagger(swagger);
+        String swaggerString = Json.pretty(swagger);
+        try {
+            String outputFile = outputFolder + File.separator + resourcesFolder + File.separator + "swagger.json";
+            FileUtils.writeStringToFile(new File(outputFile), swaggerString);
+            LOGGER.debug("wrote file to " + outputFile);
+        } catch (Exception e) {
+            LOGGER.error(e.getMessage(), e);
+        }
     }
 
     @Override
