@@ -33,10 +33,14 @@ protected val applicationName: Option[String] = Some("{{basePathWithoutHost}}/{{
     def {{nickname}}({{#allParams}}{{paramName}}:{{>paramType}}{{#hasMore}}, {{/hasMore}}{{/allParams}}): Any
 
     {{httpMethod}}("{{{vendorExtensions.x-scalatra-path}}}") {
-{{#allParams}}
-        {{#isFile}}val {{paramName}} = fileParams("{{paramName}}"){{/isFile}}{{^isFile}}{{#isPathParam}}val {{paramName}} = params.getAs[{{dataType}}]("{{paramName}}"){{/isPathParam}}{{>queryParamOperation}}{{>headerParamOperation}}{{>formParamMustache}}{{>bodyParamOperation}}{{/isFile}}{{/allParams}}
+        {{#allParams}}{{#isFile}}
+            val {{paramName}} = fileParams("{{paramName}}"){{/isFile}}{{^isFile}}{{#isPathParam}}
+            val {{paramName}} = params.getAs[{{dataType}}]("{{paramName}}"){{/isPathParam}}
+        {{>queryParamOperation}}{{>headerParamOperation}}{{>formParamMustache}}{{>bodyParamOperation}}{{/isFile}}
+        {{/allParams}}
         {{nickname}}({{#allParams}}{{paramName}}{{#hasMore}}, {{/hasMore}}{{/allParams}})
     }
+
 
 {{/operation}}
 {{/operations}}

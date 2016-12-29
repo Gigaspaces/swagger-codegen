@@ -1,3 +1,3 @@
     {{#isBodyParam}}
-      val {{paramName}} = parsedBody.extract[{{dataType}}]
+      val {{paramName}} = parsedBody.extractOpt[{{dataType}}]
     {{/isBodyParam}}
